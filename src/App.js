@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from "react";
-import api from './services/api'
+//import api from './services/api'
 import {
   SafeAreaView,
   View,
@@ -9,17 +9,17 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import api from "./services/api";
 //import { ReloadInstructions } from "react-native/Libraries/NewAppScreen";
 
 export default function App() {
-   const [repositories, setRepositories] = useState([]);
+  const [repositories, setRepositories] = useState([]);
 
   useEffect(() => {
-    api.get(repositories).then(response=>{
+    api.get('repositories').then(response=>{
       setRepositories(response.data)
     })
   },[])
-    
 
   async function handleLikeRepository(id) {
     const response = await api.post(`repositories/${id}/like`)
@@ -27,7 +27,7 @@ export default function App() {
     const likeRepository = response.data;
 
     const repositoriesUpdate = repositories.map(repository=>{
-      if(repositories.id===id){
+      if(repository.id===id){
         return likeRepository
       }else{
         return repository
@@ -36,7 +36,6 @@ export default function App() {
 
     setRepositories(repositoriesUpdate);
   }
-
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
@@ -49,8 +48,8 @@ export default function App() {
           <Text style={styles.repository}>{repository.title}</Text>
 
           <View style={styles.techsContainer}>
-            {repository.thecs.map(tech=>(
-              <Text key={techs} style={styles.tech}>
+            {repository.techs.map(tech=>(
+              <Text key={tech} style={styles.tech}>
                 {tech}
               </Text>
             
